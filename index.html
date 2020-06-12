@@ -1,134 +1,115 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Google Sheets API Quickstart</title>
-    <meta charset="utf-8" />
-  </head>
-  <body>
-    <p>Google Sheets API Quickstart</p>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.2.0/papaparse.min.js"
+        integrity="sha256-avg9BR9RTe3PbtSicrUm27/1o3Qc4s7cYETPF+TDwIo=" crossorigin="anonymous"></script>
+</head>
 
-    <!--Add buttons to initiate auth sequence and sign out-->
-    <button id="authorize_button" style="display: none;">Authorize</button>
-    <button id="signout_button" style="display: none;">Sign Out</button>
+<body>
+    <div align="center">
+        <h1>Student Information Query</h1>
+        <form action="/index.html" class="form-inline">
+            <div class="form-group">
+                <input type="text" class="form-control mb-2 mr-sm-2" id="name" name="name" value=""
+                    placeholder="Name">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-success">
+            </div>
+        </form>
+        <br>
+        <div>
+            <div id="filtered-students"></div>
+            <div id="selected-student">
+                <h3><b>Name:</b> <span id="student-name"></span></h3>
+                <h3><b>DP1:</b> <span id="dp1"></span></h3>
+                <h3><b>DP2:</b> <span id="dp2"></span></h3>
+                <h3><b>DP3:</b> <span id="dp3"></span></h3>
+                <h3><b>Dept Honors:</b> <span id="dept-honors"></span></h3>
+                <h3><b>Cum Laude:</b> <span id="cum-laude"></span></h3>
+                <h3><b>Student Leader:</b> <span id="student-leader"></span></h3>
+                <h3><b>Quote:</b> <span id="quote"></span></h3>
+                <h3><b>Photo:</b> <img id="photo"></img></h3>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#selected-student').hide();
+        $.ajax({
+            url: 'test.csv',
+            dataType: 'text',
+        }).done(parseCSV);
 
-    <pre id="content" style="white-space: pre-wrap;"></pre>
+        function getFirstAndLastName() {
+            var url_string = window.location.href
+            var url = new URL(url_string);
+            var name = url.searchParams.get("name").toLowerCase();
 
-    <script type="text/javascript">
-      // Client ID and API key from the Developer Console
-      var CLIENT_ID = '341928619379-e40tkh526j532jvts8r2v6bh4enipn3h.apps.googleusercontent.com';
-      var API_KEY = 'AIzaSyBtrU10z3PLj2gYgS3kvUlJVNgUNow9LOo';
-
-      // Array of API discovery doc URLs for APIs used by the quickstart
-      var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
-
-      // Authorization scopes required by the API; multiple scopes can be
-      // included, separated by spaces.
-      var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
-
-      var authorizeButton = document.getElementById('authorize_button');
-      var signoutButton = document.getElementById('signout_button');
-
-      /**
-       *  On load, called to load the auth2 library and API client library.
-       */
-      function handleClientLoad() {
-        gapi.load('client:auth2', initClient);
-      }
-
-      /**
-       *  Initializes the API client library and sets up sign-in state
-       *  listeners.
-       */
-      function initClient() {
-        gapi.client.init({
-          apiKey: API_KEY,
-          clientId: CLIENT_ID,
-          discoveryDocs: DISCOVERY_DOCS,
-          scope: SCOPES
-        }).then(function () {
-          // Listen for sign-in state changes.
-          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-          // Handle the initial sign-in state.
-          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-          authorizeButton.onclick = handleAuthClick;
-          signoutButton.onclick = handleSignoutClick;
-        }, function(error) {
-          appendPre(JSON.stringify(error, null, 2));
-        });
-      }
-
-      /**
-       *  Called when the signed in status changes, to update the UI
-       *  appropriately. After a sign-in, the API is called.
-       */
-      function updateSigninStatus(isSignedIn) {
-        if (isSignedIn) {
-          authorizeButton.style.display = 'none';
-          signoutButton.style.display = 'block';
-          listMajors();
-        } else {
-          authorizeButton.style.display = 'block';
-          signoutButton.style.display = 'none';
+            return name
         }
-      }
 
-      /**
-       *  Sign in the user upon button click.
-       */
-      function handleAuthClick(event) {
-        gapi.auth2.getAuthInstance().signIn();
-      }
+        function checkKnownStudent() {
+            var url_string = window.location.href
+            var url = new URL(url_string);
+            var known_student = url.searchParams.get("known_student");
+            var full_name = url.searchParams.get("full_name");
 
-      /**
-       *  Sign out the user upon button click.
-       */
-      function handleSignoutClick(event) {
-        gapi.auth2.getAuthInstance().signOut();
-      }
+            return [known_student, full_name]
+        }
 
-      /**
-       * Append a pre element to the body containing the given message
-       * as its text node. Used to display the results of the API call.
-       *
-       * @param {string} message Text to be placed in pre element.
-       */
-      function appendPre(message) {
-        var pre = document.getElementById('content');
-        var textContent = document.createTextNode(message + '\n');
-        pre.appendChild(textContent);
-      }
+        function parseCSV(data) {
+            var parsed = Papa.parse(data).data;
+            parsed.shift(); // Remove first (header) row from csv
 
-      /**
-       * Print the names and majors of students in a sample spreadsheet:
-       * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-       */
-      function listMajors() {
-        gapi.client.sheets.spreadsheets.values.get({
-          spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-          range: 'Class Data!A2:E',
-        }).then(function(response) {
-          var range = response.result;
-          if (range.values.length > 0) {
-            appendPre('Name, Major:');
-            for (i = 0; i < range.values.length; i++) {
-              var row = range.values[i];
-              // Print columns A and E, which correspond to indices 0 and 4.
-              appendPre(row[0] + ', ' + row[4]);
+            var cKnownStudent = checkKnownStudent()
+
+            if (cKnownStudent[0]) {
+                var selected_student = []
+                var student_name = cKnownStudent[1];
+                parsed.forEach(function (student) {
+                    if (student[0   ] == cKnownStudent[1]) {
+                        selected_student = student;
+                    }
+                });
+                displaySelectedStudent(selected_student);
+
+                return "";
             }
-          } else {
-            appendPre('No data found.');
-          }
-        }, function(response) {
-          appendPre('Error: ' + response.result.error.message);
-        });
-      }
 
-    </script>
+            var input_name = getFirstAndLastName()
 
-    <script async defer src="https://apis.google.com/js/api.js"
-      onload="this.onload=function(){};handleClientLoad()"
-      onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
-  </body>
-</html>
+            filtered_students = [];
+
+            parsed.forEach(function (student) {
+                student_name = student[0].toLowerCase();
+                if (student_name.includes(input_name)) {
+                    filtered_students.push(student[0])
+                }
+            });
+
+            displayFilteredStudents(filtered_students)
+            return "";
+        }
+
+        function displaySelectedStudent(student) {
+            $('#selected-student').show();
+            $("#student-name").text(student[0]);
+            $("#dp1").text(student[1]);
+            $("#dp2").text(student[2]);
+            $("#dp3").text(student[3]);
+            $("#dept-honors").text(student[4]);
+            $("#cum-laude").text(student[5]);
+            $("#student-leader").text(student[6]);
+            $("#quote").text(student[7]);
+            $("#photo").attr("src",student[8]);
+        }
+
+        function displayFilteredStudents(filtered_students) {
+            filtered_students.forEach(function (student) {
+                var student_button = "<dir class='row'> <a class='btn btn-primary' href='?known_student=true&full_name=" + student + "'>" + student + "</a> </dir>";
+                $("#filtered-students").append(student_button);
+            });
+        }
+    </script>   
+</body>
