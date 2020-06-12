@@ -107,7 +107,7 @@
 
         function displayFilteredStudents(filtered_students) {
             filtered_students.forEach(function (student) {
-                var student_button = "<dir class='row'> <a class='btn btn-primary' href='?known_student=true&full_name=" + student + "'>" + student + "</a> </dir>";
+                var student_button = "<dir class='row'> <a class='btn btn-primary' href='convocation/?known_student=true&full_name=" + student + "'>" + student + "</a> </dir>";
                 $("#filtered-students").append(student_button);
             });
         }
