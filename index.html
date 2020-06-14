@@ -9,7 +9,7 @@
 <body>
     <div align="center">
         <h1>Student Information Query</h1>
-        <form action="/index.html" class="form-inline">
+        <form action="https://anind.github.io/convocation/" class="form-inline">
             <div class="form-group">
                 <input type="text" class="form-control mb-2 mr-sm-2" id="name" name="name" value=""
                     placeholder="Name">
@@ -23,9 +23,11 @@
             <div id="filtered-students"></div>
             <div id="selected-student">
                 <h3><b>Name:</b> <span id="student-name"></span></h3>
-                <h3><b>DP1:</b> <span id="dp1"></span></h3>
-                <h3><b>DP2:</b> <span id="dp2"></span></h3>
-                <h3><b>DP3:</b> <span id="dp3"></span></h3>
+                <h3><b>Preferred Name:</b> <span id="pname"></span></h3>
+                <h3><b>Pronunciation:</b> <span id="pronounce"></span></h3>
+                <h3><b>Degree 1:</b> <span id="dp1"></span></h3>
+                <h3><b>Degree 2:</b> <span id="dp2"></span></h3>
+                <h3><b>Degree 3:</b> <span id="dp3"></span></h3>
                 <h3><b>Dept Honors:</b> <span id="dept-honors"></span></h3>
                 <h3><b>Cum Laude:</b> <span id="cum-laude"></span></h3>
                 <h3><b>Student Leader:</b> <span id="student-leader"></span></h3>
@@ -37,7 +39,7 @@
     <script>
         $('#selected-student').hide();
         $.ajax({
-            url: 'test.csv',
+            url: 'student_data.csv',
             dataType: 'text',
         }).done(parseCSV);
 
@@ -68,7 +70,7 @@
                 var selected_student = []
                 var student_name = cKnownStudent[1];
                 parsed.forEach(function (student) {
-                    if (student[0   ] == cKnownStudent[1]) {
+                    if (student[3] == cKnownStudent[1]) {
                         selected_student = student;
                     }
                 });
@@ -82,9 +84,9 @@
             filtered_students = [];
 
             parsed.forEach(function (student) {
-                student_name = student[0].toLowerCase();
+                student_name = student[3].toLowerCase();
                 if (student_name.includes(input_name)) {
-                    filtered_students.push(student[0])
+                    filtered_students.push(student[3])
                 }
             });
 
@@ -94,20 +96,22 @@
 
         function displaySelectedStudent(student) {
             $('#selected-student').show();
-            $("#student-name").text(student[0]);
-            $("#dp1").text(student[1]);
-            $("#dp2").text(student[2]);
-            $("#dp3").text(student[3]);
-            $("#dept-honors").text(student[4]);
-            $("#cum-laude").text(student[5]);
-            $("#student-leader").text(student[6]);
-            $("#quote").text(student[7]);
-            $("#photo").attr("src",student[8]);
+            $("#student-name").text(student[3]);
+            $("#pname").text(student[4]);
+            $("#pronounce").text(student[5]);
+            $("#dp1").text(student[11]);
+            $("#dp2").text(student[12]);
+            $("#dp3").text(student[13]);
+            $("#dept-honors").text(student[14]);
+            $("#cum-laude").text(student[15]);
+            $("#student-leader").text(student[16]);
+            $("#quote").text(student[17]);
+            $("#photo").attr("src",student[18]);
         }
 
         function displayFilteredStudents(filtered_students) {
             filtered_students.forEach(function (student) {
-                var student_button = "<dir class='row'> <a class='btn btn-primary' href='convocation/?known_student=true&full_name=" + student + "'>" + student + "</a> </dir>";
+                var student_button = "<dir class='row'> <a class='btn btn-primary' href='https://anind.github.io/convocation/?known_student=true&full_name=" + student + "'>" + student + "</a> </dir>";
                 $("#filtered-students").append(student_button);
             });
         }
