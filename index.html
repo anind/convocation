@@ -33,6 +33,7 @@
                 <h3><b>Dept Honors (UW Generated - not applicable for all):</b> <span id="dept-honors"></span></h3>
                 <h3><b>Cum Laude (UW generated - not applicable for all):</b> <span id="cum-laude"></span></h3>
                 <h3><b>Student Leader (not applicable for all):</b> <span id="student-leader"></span></h3>
+                <h3><b>Participating in virtual drop-in:</b> <span id="dropin"></span></h3>
                 <h3><b>Quote (if you provided one):</b> <span id="quote"></span></h3>
                 <h3><b>Photo (if you provided one):</b> <img id="photo"></img></h3>
             </div>
@@ -108,6 +109,7 @@
             $("#cum-laude").text(student[15]);
             $("#student-leader").text(student[16]);
             $("#quote").text(student[17]);
+            $("dropin").text(student[19]);
             $("#photo").attr("src",student[18]);
         }
 
