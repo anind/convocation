@@ -1,5 +1,5 @@
 <head>
-    <title>iSchool Convocation Verification</title>
+    <title>Test</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -24,19 +24,23 @@
         <div>
             <div id="filtered-students"></div>
             <div id="selected-student">
-                <h2 id="details"></h2>
-                <h3><b>Name:</b> <span id="student-name"></span></h3>
-                <h3><b>Preferred Name (optional - will be used if available):</b> <span id="pname"></span></h3>
-                <h3><b>Pronunciation (optional):</b> <span id="pronounce"></span></h3>
-                <h3><b>Degree 1:</b> <span id="dp1"></span></h3>
-                <h3><b>Degree 2 (not applicable for all):</b> <span id="dp2"></span></h3>
-                <h3><b>Degree 3 (not applicable for all):</b> <span id="dp3"></span></h3>
-                <!-- <h3><b>Dept Honors (UW Generated - not applicable for all):</b> <span id="dept-honors"></span></h3>
-                <h3><b>Cum Laude (UW generated - not applicable for all):</b> <span id="cum-laude"></span></h3>
-                <h3><b>Student Leader (not applicable for all):</b> <span id="student-leader"></span></h3> -->
-                <h3><b>Participating in virtual drop-in:</b> <span id="dropin"></span></h3>
-                <h3><b>Quote (if you provided one):</b> <span id="quote"></span></h3>
-                <h3><b>Photo (if you provided one):</b> <img id="photo"></img></h3>
+                <div id="top-details">
+                    <h2 id="details"></h2>
+                    <h3><b>Name:</b> <span id="student-name"></span></h3>
+                </div>
+                <div id="rest-details">
+                    <h3><b>Preferred Name (optional - will be used if available):</b> <span id="pname"></span></h3>
+                    <h3><b>Pronunciation (optional):</b> <span id="pronounce"></span></h3>
+                    <h3><b>Degree 1:</b> <span id="dp1"></span></h3>
+                    <h3><b>Degree 2 (not applicable for all):</b> <span id="dp2"></span></h3>
+                    <h3><b>Degree 3 (not applicable for all):</b> <span id="dp3"></span></h3>
+                    <!-- <h3><b>Dept Honors (UW Generated - not applicable for all):</b> <span id="dept-honors"></span></h3>
+                    <h3><b>Cum Laude (UW generated - not applicable for all):</b> <span id="cum-laude"></span></h3>
+                    <h3><b>Student Leader (not applicable for all):</b> <span id="student-leader"></span></h3> -->
+                    <h3><b>Participating in virtual drop-in:</b> <span id="dropin"></span></h3>
+                    <h3><b>Quote (if you provided one):</b> <span id="quote"></span></h3>
+                    <h3><b>Photo (if you provided one):</b> <img id="photo"></img></h3>
+                </div>
             </div>
         </div>
     </div>
@@ -99,12 +103,16 @@
         }
 
         function displaySelectedStudent(student) {
+            console.log(student);
             $('#selected-student').show();
+            $('#top-details').show();
             $("#student-name").text(student[3]);
             if (student[6]=='N') {
                 $("#details").text("You are currently not signed up to participate in the iSchool Convocation. Please contact iProcess@uw.edu if this is incorrect.");
+                $("#rest-details").hide();
             }
             else {
+                $('rest-details').show();
                 $("#details").text("Please confirm your details below. If anything is wrong, email iProcess@uw.edu with the details that need to be updated");
                 $("#pname").text(student[4]);
                 $("#pronounce").text(student[5]);
