@@ -1,5 +1,5 @@
 <head>
-    <title>Test</title>
+    <title>iSchool Convocation Verification</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -33,7 +33,6 @@
                     <h3><b>Pronunciation (optional):</b> <span id="pronounce"></span></h3>
                     <h3><b>Degree 1:</b> <span id="dp1"></span></h3>
                     <h3><b>Degree 2 (not applicable for all):</b> <span id="dp2"></span></h3>
-                    <h3><b>Degree 3 (not applicable for all):</b> <span id="dp3"></span></h3>
                     <!-- <h3><b>Dept Honors (UW Generated - not applicable for all):</b> <span id="dept-honors"></span></h3>
                     <h3><b>Cum Laude (UW generated - not applicable for all):</b> <span id="cum-laude"></span></h3>
                     <h3><b>Student Leader (not applicable for all):</b> <span id="student-leader"></span></h3> -->
@@ -103,28 +102,26 @@
         }
 
         function displaySelectedStudent(student) {
-            console.log(student);
             $('#selected-student').show();
             $('#top-details').show();
             $("#student-name").text(student[3]);
             if (student[6]=='N') {
-                $("#details").text("You are currently not signed up to participate in the iSchool Convocation. Please contact iProcess@uw.edu if this is incorrect.");
+                $("#details").text("You are currently NOT signed up to participate in the iSchool Convocation. Please contact iProcess@uw.edu if this is incorrect.");
                 $("#rest-details").hide();
             }
             else {
                 $('rest-details').show();
-                $("#details").text("Please confirm your details below. If anything is wrong, email iProcess@uw.edu with the details that need to be updated");
+                $("#details").text("You are signed up to participate in Convocation! Please confirm your details below. If anything is wrong, email iProcess@uw.edu with the details that need to be updated");
                 $("#pname").text(student[4]);
                 $("#pronounce").text(student[5]);
                 $("#dp1").text(student[12]);
                 $("#dp2").text(student[13]);
-                $("#dp3").text(student[14]);
-                $("#dept-honors").text(student[15]);
-                $("#cum-laude").text(student[16]);
-                $("#student-leader").text(student[17]);
-                $("#quote").text(student[18]);
-                $("dropin").text(student[20]);
-                $("#photo").attr("src",student[19]);
+                $("#dept-honors").text(student[14]);
+                $("#cum-laude").text(student[15]);
+                $("#student-leader").text(student[16]);
+                $("#quote").text(student[17]);
+                $("dropin").text(student[19]);
+                $("#photo").attr("src",student[18]);
             }
         }
 
